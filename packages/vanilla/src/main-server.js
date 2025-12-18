@@ -3,6 +3,7 @@ import { HomePage } from "./pages/HomePage.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 import { ProductDetailPage } from "./pages/ProductDetailPage.js";
 import { router } from "./router/router.js";
+import { generateTitle } from "./utils/updateTitle.js";
 
 async function prefetchData(routeInfo, params, query) {
   if (routeInfo.path === "/") {
@@ -46,15 +47,15 @@ async function prefetchData(routeInfo, params, query) {
 }
 
 function generateHead(routeInfo, query, data) {
-  if (routeInfo?.path === "/product/:id/" && data.currentProduct) {
-    return `<title>${data.currentProduct.title} - 쇼핑몰</title>`;
-  }
-  return `<title>쇼핑몰 - 홈</title>`;
+  const product = routeInfo?.path === "/product/:id/" ? data.currentProduct : null;
+  const title = generateTitle(routeInfo, product);
+  return `<title>${title}</title>`;
 }
 
 export async function render(url, query = {}) {
   router.addRoute("/", HomePage);
   router.addRoute("/product/:id/", ProductDetailPage);
+  router.addRoute(".*", NotFoundPage);
 
   const routeInfo = router.match(url, query);
   const storeData = await prefetchData(routeInfo, routeInfo.params, query);
