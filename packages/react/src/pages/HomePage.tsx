@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { loadNextProducts, loadProductsAndCategories, ProductList, SearchBar } from "../entities";
+import { productStore } from "../entities/products/productStore";
 import { useRouterContext } from "../router/RouterContext";
 import { PageWrapper } from "./PageWrapper";
 
@@ -19,8 +20,8 @@ export const HomePage = () => {
     const scrollHandler = () => loadNextProducts(router);
     window.addEventListener("scroll", scrollHandler);
 
-    const hasInitialData = window.__INITIAL_DATA__;
-    if (!hasInitialData) {
+    const state = productStore.getState();
+    if (state.products.length === 0 || state.loading) {
       loadProductsAndCategories(router);
     }
 

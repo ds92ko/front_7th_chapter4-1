@@ -54,6 +54,10 @@ function main() {
         type: PRODUCT_ACTIONS.SET_CURRENT_PRODUCT,
         payload: data.currentProduct,
       });
+      productStore.dispatch({
+        type: PRODUCT_ACTIONS.SET_STATUS,
+        payload: "done",
+      });
     }
     if (data.relatedProducts) {
       productStore.dispatch({
